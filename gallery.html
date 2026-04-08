@@ -1,191 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Gallery — Maya Farm | Wakiso, Uganda</title>
-  <meta name="description" content="Photo gallery of Maya Farm in Wakiso, Uganda — coffee farming, banana plantation, poultry, piggery, coffee processing and organic vegetables." />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 
-  <!-- ══ NAVIGATION ══ -->
-  <nav class="nav scrolled" id="mainNav">
-    <div class="container nav-inner">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-name" style="color:var(--green-deep)">Maya Farm</span>
-        <span class="logo-tagline" style="color:var(--text-light)">Wakiso, Uganda &nbsp;·&nbsp; Est. 2010</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="activities.html">Activities</a></li>
-        <li><a href="gallery.html" class="active">Gallery</a></li>
-        <li><a href="contact.html" class="nav-cta">Contact Us</a></li>
-      </ul>
-      <div class="hamburger" id="hamburger">
-        <span></span><span></span><span></span>
+<nav class="nav scrolled" id="mainNav">
+  <div class="nav-inner container">
+    <a href="index.html" class="nav-logo">
+      <span class="logo-name">Maya Farm</span>
+      <span class="logo-tagline">Wakiso, Uganda &nbsp;·&nbsp; Est. 2010</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="activities.html">Activities</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="contact.html" class="nav-cta">Contact Us</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="activities.html">Activities</a>
+  <a href="products.html">Products</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="contact.html">Contact Us</a>
+</div>
+
+<header class="page-header">
+  <div class="page-header-bg" style="background-image:url('https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=1800&q=80');"></div>
+  <div class="container page-header-content">
+    <h1>Life at <span>Maya Farm</span></h1>
+  </div>
+</header>
+
+<section class="gallery-full">
+  <div class="container">
+    <div class="fade-in" style="margin-bottom:2rem;">
+      <span class="section-label">Photo Gallery</span>
+      <h2 class="section-title">Scenes from <span>the Field</span></h2>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="gallery-filters fade-in delay-1">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="coffee">Coffee</button>
+      <button class="filter-btn" data-filter="banana">Banana</button>
+      <button class="filter-btn" data-filter="livestock">Livestock</button>
+      <button class="filter-btn" data-filter="landscape">Landscape</button>
+      <button class="filter-btn" data-filter="processing">Processing</button>
+    </div>
+
+    <!-- Swipeable Gallery -->
+    <div class="gallery-swiper-full-outer">
+      <div class="gallery-swiper-full-wrap">
+        <div class="gallery-swiper-full-track" id="gallerySwiperTrack">
+
+          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=700&q=80" alt="Coffee plantation" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Coffee Plantation</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=700&q=80" alt="Banana plantation" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Banana Plantation</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=700&q=80" alt="Farm landscape" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Farm Landscape</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="processing" data-src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=700&q=80" alt="Coffee cherries" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Coffee Cherries</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="livestock" data-src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=700&q=80" alt="Poultry" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Free-Range Poultry</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&q=80" alt="Green fields" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Green Fields</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=700&q=80" alt="Coffee" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Coffee Close-up</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=700&q=80" alt="Farm aerial" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Farm Aerial View</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=700&q=80" alt="Banana harvest" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Banana Harvest</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="processing" data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80" alt="Coffee processing" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Processing Station</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="livestock" data-src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=700&q=80" alt="Piggery" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Piggery</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=700&q=80" alt="Drying beds" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Drying Beds</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=700&q=80" alt="Sunrise" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Sunrise at Maya Farm</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="processing" data-src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=700&q=80" alt="Export" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Export Ready</span></div>
+          </div>
+          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1400&q=90">
+            <img src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=700&q=80" alt="Bananas" loading="lazy"/>
+            <div class="gallery-full-slide-overlay"><span>Banana Bunch</span></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="swiper-controls">
+        <button class="swiper-btn" id="galleryPrev" aria-label="Previous">&#8592;</button>
+        <button class="swiper-btn" id="galleryNext" aria-label="Next">&#8594;</button>
+        <div class="swiper-dots" id="gallerySwiperDots"></div>
       </div>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <!-- ══ PAGE HEADER ══ -->
-  <header class="page-header">
-    <div class="page-header-bg" style="background-image: url('https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=1800&q=80');"></div>
-    <div class="container page-header-content">
-      <div class="breadcrumb">Home &nbsp;/&nbsp; Gallery</div>
-      <h1>Life at <em>Maya Farm</em></h1>
-    </div>
-  </header>
+<!-- Visit CTA -->
+<section style="background:var(--cream);padding:5rem 0;text-align:center;">
+  <div class="container">
+    <span class="section-label fade-in">Farm Visits</span>
+    <h2 class="section-title fade-in delay-1" style="margin-bottom:1rem;">Experience Maya Farm <span>In Person</span></h2>
+    <p class="fade-in delay-2" style="color:var(--text-mid);max-width:500px;margin:0 auto 2.2rem;font-size:.96rem;">Schedule a guided tour and see our coffee, bananas, poultry and processing operations at work. We welcome investors, students, chefs, roasters and agri-enthusiasts.</p>
+    <a href="contact.html" class="btn-primary fade-in delay-3">Book a Farm Tour</a>
+  </div>
+</section>
 
-  <!-- ══ GALLERY FULL ══ -->
-  <section class="gallery-full">
-    <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:2.5rem;" class="fade-in">
-        <div>
-          <span class="section-label">Photo Gallery</span>
-          <h2 class="section-title">Scenes from <em>the Field</em></h2>
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">Maya Farm</div>
+        <div class="footer-loc">Wakiso District, Uganda</div>
+        <p>An integrated organic farming enterprise committed to producing premium agricultural products while sustaining communities and ecosystems for generations to come.</p>
+        <div class="footer-contact-info">
+          <span><strong>Location:</strong> Wakiso District, Central Region, Uganda</span>
+          <span><strong>Email:</strong> info@mayafarm.ug</span>
+          <span><strong>Phone:</strong> +256 700 000 000</span>
         </div>
       </div>
-
-      <!-- Filter Buttons -->
-      <div class="gallery-filters fade-in delay-1">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="coffee">Coffee</button>
-        <button class="filter-btn" data-filter="banana">Banana</button>
-        <button class="filter-btn" data-filter="livestock">Livestock</button>
-        <button class="filter-btn" data-filter="landscape">Landscape</button>
-        <button class="filter-btn" data-filter="processing">Processing</button>
-      </div>
-
-      <!-- Gallery Grid -->
-      <div class="gallery-grid-full">
-
-        <div class="gallery-item fade-in" data-category="coffee"
-             data-src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=700&q=80" alt="Coffee plantation" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Coffee Plantation</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-1" data-category="banana"
-             data-src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=700&q=80" alt="Banana plantation" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Banana Plantation</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-2" data-category="landscape"
-             data-src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=700&q=80" alt="Farm landscape" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Farm Landscape</span></div>
-        </div>
-
-        <div class="gallery-item fade-in" data-category="processing"
-             data-src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=700&q=80" alt="Coffee cherries" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Coffee Cherries</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-1" data-category="livestock"
-             data-src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=700&q=80" alt="Poultry" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Free-Range Poultry</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-2" data-category="landscape"
-             data-src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&q=80" alt="Green fields" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Green Fields</span></div>
-        </div>
-
-        <div class="gallery-item fade-in" data-category="coffee"
-             data-src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=700&q=80" alt="Coffee" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Coffee Close-up</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-1" data-category="landscape"
-             data-src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=700&q=80" alt="Farm aerial" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Farm Aerial</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-2" data-category="banana"
-             data-src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=700&q=80" alt="Banana harvest" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Banana Harvest</span></div>
-        </div>
-
-        <div class="gallery-item fade-in" data-category="processing"
-             data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80" alt="Coffee processing" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Processing Station</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-1" data-category="livestock"
-             data-src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=700&q=80" alt="Piggery" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Piggery</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-2" data-category="coffee"
-             data-src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=700&q=80" alt="Coffee drying beds" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Drying Beds</span></div>
-        </div>
-
-        <div class="gallery-item fade-in" data-category="landscape"
-             data-src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=700&q=80" alt="Sunrise farm" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Sunrise at Maya Farm</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-1" data-category="processing"
-             data-src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=700&q=80" alt="Coffee bags" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Export Ready</span></div>
-        </div>
-
-        <div class="gallery-item fade-in delay-2" data-category="banana"
-             data-src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1400&q=90">
-          <img src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=700&q=80" alt="Bananas" loading="lazy" />
-          <div class="gallery-item-overlay"><span>Banana Bunch</span></div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ══ VISIT CTA ══ -->
-  <section style="background: var(--green-pale); padding: 5rem 0; text-align:center;">
-    <div class="container">
-      <span class="section-label fade-in">Farm Visits</span>
-      <h2 class="section-title fade-in delay-1" style="margin-bottom:1.2rem;">Experience Maya Farm <em>In Person</em></h2>
-      <p class="fade-in delay-2" style="color:var(--text-mid); max-width:520px; margin:0 auto 2.5rem; font-weight:300;">
-        Schedule a guided tour and see our coffee, bananas, poultry and processing operations at work. We welcome investors, students, chefs, roasters and agri-enthusiasts.
-      </p>
-      <a href="contact.html" class="btn-primary fade-in delay-3">Book a Farm Tour</a>
-    </div>
-  </section>
-
-  <!-- ══ FOOTER ══ -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div class="footer-logo">Maya Farm</div>
-          <div class="footer-loc">Wakiso District, Uganda</div>
-          <p>An integrated organic farming enterprise committed to producing premium agricultural products while sustaining communities and ecosystems for generations to come.</p>
-        </div>
+      <div class="footer-links">
         <div class="footer-col">
-          <h5>Navigation</h5>
+          <h5>Navigate</h5>
           <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="activities.html">Our Activities</a></li>
+            <li><a href="activities.html">Activities</a></li>
+            <li><a href="products.html">Products</a></li>
             <li><a href="gallery.html">Gallery</a></li>
             <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
         <div class="footer-col">
-          <h5>Our Enterprises</h5>
+          <h5>Enterprises</h5>
           <ul>
             <li><a href="activities.html#coffee">Coffee Farming</a></li>
             <li><a href="activities.html#coffee-processing">Coffee Processing</a></li>
@@ -195,26 +178,20 @@
             <li><a href="activities.html#vegetables">Vegetables &amp; Apiary</a></li>
           </ul>
         </div>
-        <div class="footer-col footer-contact">
-          <h5>Contact</h5>
-          <p><strong>Location</strong><br>Wakiso District, Central Region, Uganda</p>
-          <p><strong>Email</strong><br>info@mayafarm.ug</p>
-          <p><strong>Phone</strong><br>+256 700 000 000</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2025 Maya Farm, Wakiso. All rights reserved.</span>
-        <span>Cultivating Excellence. Naturally.</span>
       </div>
     </div>
-  </footer>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox">
-    <img class="lightbox-img" id="lightbox-img" src="" alt="Gallery" />
-    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <div class="footer-bottom">
+      <span>&copy; 2025 Maya Farm, Wakiso. All rights reserved.</span>
+      <span>Cultivating Excellence. Naturally.</span>
+    </div>
   </div>
+</footer>
 
-  <script src="js/main.js"></script>
+<div class="lightbox" id="lightbox">
+  <img class="lightbox-img" id="lightbox-img" src="" alt="Gallery"/>
+  <button class="lightbox-close" id="lightbox-close">&times;</button>
+</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
