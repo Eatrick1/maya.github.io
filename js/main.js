@@ -13,22 +13,46 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('scroll', checkScroll, { passive: true });
   }
 
-  /* ── Hamburger ── */
+  /* ── Hamburger — right-side slide panel ── */
   const hamburger = document.getElementById('hamburger');
   const mobileNav = document.getElementById('mobileNav');
-  if (hamburger && mobileNav) {
-    hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileNav.classList.toggle('open');
-    });
-    // close on link click
+  const overlay   = document.getElementById('mobileNavOverlay');
+  const mnClose   = document.getElementById('mobileNavClose');
+
+  function openMobileNav() {
+    if (!mobileNav) return;
+    hamburger.classList.add('open');
+    mobileNav.classList.add('open');
+    if (overlay) { overlay.style.display='block'; setTimeout(()=>overlay.classList.add('open'),10); }
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileNav() {
+    if (!mobileNav) return;
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    if (overlay) {
+      overlay.classList.remove('open');
+      setTimeout(()=>{ overlay.style.display='none'; }, 350);
+    }
+    document.body.style.overflow = '';
+  }
+
+  if (hamburger) hamburger.addEventListener('click', () => {
+    mobileNav.classList.contains('open') ? closeMobileNav() : openMobileNav();
+  });
+  if (mnClose)  mnClose.addEventListener('click', closeMobileNav);
+  if (overlay)  overlay.addEventListener('click', closeMobileNav);
+
+  // close on link click
+  if (mobileNav) {
     mobileNav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        mobileNav.classList.remove('open');
-      });
+      a.addEventListener('click', closeMobileNav);
     });
   }
+
+  // close on Escape
+  document.addEventListener('keydown', e => { if (e.key==='Escape') closeMobileNav(); });
 
   /* ── Active nav link ── */
   const current = window.location.pathname.split('/').pop() || 'index.html';
