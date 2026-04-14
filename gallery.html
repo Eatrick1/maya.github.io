@@ -3,16 +3,344 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Gallery — Maya Farm | Wakiso, Uganda</title>
+  <title>Gallery — Maya Farm | Mpigi, Uganda</title>
   <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    /* ══════════════════════════════════════════
+       GALLERY PAGE — Enhanced Design
+    ══════════════════════════════════════════ */
+
+    .gallery-full { padding: 3rem 0 0; }
+
+    /* ── Intro header ── */
+    .gallery-intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .gallery-intro-left .section-label {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .72rem;
+      letter-spacing: .22em;
+      color: #2d6a4f;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+    .gallery-intro-left .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 2px;
+      background: #2d6a4f;
+      border-radius: 2px;
+    }
+    .gallery-intro-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: #1b4332;
+      line-height: 1.1;
+      margin: 0;
+    }
+    .gallery-intro-left h2 span { color: #40916c; font-style: italic; }
+    .gallery-count {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      color: #6b7280;
+      letter-spacing: .05em;
+      white-space: nowrap;
+      padding-bottom: .4rem;
+    }
+    .gallery-count strong { color: #1b4332; font-weight: 600; }
+
+    /* ── Masonry grid ── */
+    .gallery-masonry {
+      column-count: 4;
+      column-gap: 16px;
+      padding: 0 0 5rem;
+    }
+    .gallery-masonry-item {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      display: block;
+      box-shadow: 0 2px 12px rgba(27,67,50,.08);
+      transition: box-shadow .35s ease, transform .35s ease;
+    }
+    .gallery-masonry-item:hover {
+      box-shadow: 0 14px 44px rgba(27,67,50,.24);
+      transform: translateY(-4px);
+    }
+    .gallery-masonry-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform .55s cubic-bezier(.25,.46,.45,.94);
+    }
+    .gallery-masonry-item:hover img { transform: scale(1.06); }
+
+    /* Gradient overlay */
+    .gmi-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(27,67,50,.75) 0%, rgba(27,67,50,0) 55%);
+      opacity: 0;
+      transition: opacity .35s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1rem;
+      border-radius: 18px;
+    }
+    .gallery-masonry-item:hover .gmi-overlay { opacity: 1; }
+
+    .gmi-icon {
+      width: 30px; height: 30px;
+      background: rgba(255,255,255,.18);
+      border: 1.5px solid rgba(255,255,255,.55);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .45rem;
+      backdrop-filter: blur(4px);
+      transform: scale(.65);
+      transition: transform .35s ease;
+    }
+    .gallery-masonry-item:hover .gmi-icon { transform: scale(1); }
+    .gmi-icon svg { width: 13px; height: 13px; fill: #fff; }
+
+    .gmi-label {
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      transform: translateY(6px);
+      transition: transform .35s ease;
+    }
+    .gallery-masonry-item:hover .gmi-label { transform: translateY(0); }
+
+    /* Number badge top-right */
+    .gmi-badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(6px);
+      color: #1b4332;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .58rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 3px 9px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    .gallery-masonry-item:hover .gmi-badge { opacity: 1; }
+
+    /* Responsive */
+    @media(max-width:1100px){ .gallery-masonry{ column-count:3; } }
+    @media(max-width:768px) { .gallery-masonry{ column-count:2; column-gap:10px; } .gallery-masonry-item{ margin-bottom:10px; } }
+    @media(max-width:480px) { .gallery-masonry{ column-count:2; column-gap:8px; } .gallery-masonry-item{ margin-bottom:8px; border-radius:12px; } }
+
+    /* ══════════════════════════════════════════
+       LIGHTBOX — Prev / Next / Thumbnails
+    ══════════════════════════════════════════ */
+    .lb {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s ease;
+    }
+    .lb.open { opacity: 1; pointer-events: all; }
+
+    .lb-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,18,12,.93);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Image area */
+    .lb-stage {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 72px 90px 110px;
+      box-sizing: border-box;
+    }
+    .lb-img {
+      max-width: 100%;
+      max-height: calc(100vh - 200px);
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 32px 100px rgba(0,0,0,.65);
+      display: block;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .lb-img.fade { opacity: 0; transform: scale(.96); }
+
+    /* Close */
+    .lb-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      z-index: 3;
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,.1);
+      border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s, transform .2s;
+    }
+    .lb-close:hover { background: rgba(255,255,255,.22); transform: scale(1.08) rotate(90deg); }
+
+    /* Prev / Next */
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 54px; height: 54px;
+      background: rgba(255,255,255,.1);
+      border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.35rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+      transition: background .2s, transform .2s, opacity .2s;
+    }
+    .lb-nav:hover { background: rgba(255,255,255,.22); }
+    .lb-prev { left: 20px; }
+    .lb-prev:hover { transform: translateY(-50%) translateX(-2px); }
+    .lb-next { right: 20px; }
+    .lb-next:hover { transform: translateY(-50%) translateX(2px); }
+    .lb-nav.disabled { opacity: .2; pointer-events: none; }
+
+    /* Caption row */
+    .lb-caption {
+      position: absolute;
+      bottom: 70px; left: 0; right: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      z-index: 3;
+    }
+    .lb-label {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.8);
+    }
+    .lb-counter {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .75rem;
+      color: rgba(255,255,255,.4);
+      letter-spacing: .1em;
+    }
+
+    /* Thumbnail strip */
+    .lb-thumbstrip {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      gap: 6px;
+      padding: 7px 12px;
+      background: rgba(255,255,255,.07);
+      border-radius: 50px;
+      backdrop-filter: blur(8px);
+      max-width: calc(100vw - 160px);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .lb-thumbstrip::-webkit-scrollbar { display: none; }
+
+    .lb-thumb {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: .5;
+      transition: opacity .2s, border-color .2s, transform .2s;
+    }
+    .lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .lb-thumb:hover:not(.active) { opacity: .8; }
+    .lb-thumb.active {
+      border-color: #52b788;
+      opacity: 1;
+      transform: scale(1.12);
+    }
+
+    /* Keyboard hint */
+    .lb-hint {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .62rem;
+      color: rgba(255,255,255,.28);
+      letter-spacing: .12em;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    @media(max-width:600px){
+      .lb-stage { padding: 60px 16px 120px; }
+      .lb-prev { left: 8px; }
+      .lb-next { right: 8px; }
+      .lb-nav { width: 40px; height: 40px; font-size: 1.1rem; }
+      .lb-thumbstrip { bottom: 14px; max-width: calc(100vw - 40px); }
+      .lb-hint { display: none; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- ══ NAV ══ -->
 <nav class="nav scrolled" id="mainNav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo">
       <span class="logo-name">Maya Farm</span>
-      <span class="logo-tagline">Wakiso, Uganda &nbsp;·&nbsp; Est. 2025</span>
+      <span class="logo-tagline">Mpigi, Uganda &nbsp;·&nbsp; Est. 2026</span>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -34,108 +362,130 @@
   <a href="contact.html">Contact Us</a>
 </div>
 
+<!-- ══ PAGE HEADER ══ -->
 <header class="page-header">
-  <div class="page-header-bg" style="background-image:url('https://images.unsplash.com/photo-1587049352851-8d4e89133924?w=1800&q=80');"></div>
+  <div class="page-header-bg" style="background-image:url('images/coffestage2.jpeg');"></div>
   <div class="container page-header-content">
     <h1>Life at <span>Maya Farm</span></h1>
   </div>
 </header>
 
+<!-- ══ GALLERY ══ -->
 <section class="gallery-full">
   <div class="container">
-    <div class="fade-in" style="margin-bottom:2rem;">
-      <span class="section-label">Photo Gallery</span>
-      <h2 class="section-title">Scenes from <span>the Field</span></h2>
+
+    <div class="gallery-intro fade-in">
+      <div class="gallery-intro-left">
+        <div class="section-label">Photo Gallery</div>
+        <h2>Scenes from <span>the Field</span></h2>
+      </div>
+      <div class="gallery-count"><strong>16</strong> photos &nbsp;·&nbsp; Click any image to explore</div>
     </div>
 
-    <!-- Filter Buttons -->
-    <div class="gallery-filters fade-in delay-1">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="coffee">Coffee</button>
-      <button class="filter-btn" data-filter="banana">Banana</button>
-      <button class="filter-btn" data-filter="livestock">Livestock</button>
-      <button class="filter-btn" data-filter="landscape">Landscape</button>
-      <button class="filter-btn" data-filter="processing">Processing</button>
-    </div>
+    <!-- Masonry Grid -->
+    <div class="gallery-masonry" id="galleryMasonry">
 
-    <!-- Swipeable Gallery -->
-    <div class="gallery-swiper-full-outer">
-      <div class="gallery-swiper-full-wrap">
-        <div class="gallery-swiper-full-track" id="gallerySwiperTrack">
-
-          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=700&q=80" alt="Coffee plantation" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Coffee Plantation</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1528825871115-3581a5387919?w=700&q=80" alt="Banana plantation" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Banana Plantation</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=700&q=80" alt="Farm landscape" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Farm Landscape</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="processing" data-src="">
-            <!--img src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=700&q=80" alt="Coffee cherries" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Coffee Cherries</span></div-->
-          </div>
-          <div class="gallery-full-slide" data-category="livestock" data-src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=700&q=80" alt="Poultry" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Free-Range Poultry</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&q=80" alt="Green fields" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Green Fields</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=700&q=80" alt="Coffee" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Coffee Close-up</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=700&q=80" alt="Farm aerial" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Farm Aerial View</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=700&q=80" alt="Banana harvest" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Banana Harvest</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="processing" data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&q=80" alt="Coffee processing" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Processing Station</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="livestock" data-src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1582564286939-400a311013a2?w=700&q=80" alt="Piggery" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Piggery</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="coffee" data-src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=1400&q=90">
-            <!--img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=700&q=80" alt="Drying beds" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Drying Beds</span></div-->
-          </div>
-          <div class="gallery-full-slide" data-category="landscape" data-src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=700&q=80" alt="Sunrise" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Sunrise at Maya Farm</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="processing" data-src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=700&q=80" alt="Export" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Export Ready</span></div>
-          </div>
-          <div class="gallery-full-slide" data-category="banana" data-src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=1400&q=90">
-            <img src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?w=700&q=80" alt="Bananas" loading="lazy"/>
-            <div class="gallery-full-slide-overlay"><span>Banana Bunch</span></div>
-          </div>
-
-        </div>
+      <div class="gallery-masonry-item" data-index="0" data-src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=1400&q=90" data-label="Coffee Plantation">
+        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80" alt="Coffee Plantation" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffee Plantation</div></div>
+        <div class="gmi-badge">01 / 16</div>
       </div>
-      <div class="swiper-controls">
-        <button class="swiper-btn" id="galleryPrev" aria-label="Previous">&#8592;</button>
-        <button class="swiper-btn" id="galleryNext" aria-label="Next">&#8594;</button>
-        <div class="swiper-dots" id="gallerySwiperDots"></div>
+
+      <div class="gallery-masonry-item" data-index="1" data-src="images/coffe.jpeg"" data-label="Banana Plantation">
+        <img src="images/coffe.jpeg" alt="Banana Plantation" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffee Plantation</div></div>
+        <div class="gmi-badge">02 / 16</div>
       </div>
+
+      <div class="gallery-masonry-item" data-index="2" data-src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=1400&q=90" data-label="Farm Landscape">
+        <img src="https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=600&q=80" alt="Farm Landscape" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Farm Landscape</div></div>
+        <div class="gmi-badge">03 / 16</div>
+      </div>
+
+      <!--div class="gallery-masonry-item" data-index="3" data-src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=1400&q=90" data-label="Free-Range Poultry">
+        <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?w=600&q=80" alt="Free-Range Poultry" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Free-Range Poultry</div></div>
+        <div class="gmi-badge">04 / 16</div>
+      </div-->
+
+      <div class="gallery-masonry-item" data-index="4" data-src="images/coffestage2.jpeg"" data-label="Green Fields">
+        <img src="images/coffestage2.jpeg" alt="Green Fields" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Harvest Fresh Coffee</div></div>
+        <div class="gmi-badge">05 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="5" data-src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1400&q=90" data-label="Coffee Close-up">
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80" alt="Coffee Close-up" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffee Close-up</div></div>
+        <div class="gmi-badge">06 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="6" data-src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=1400&q=90" data-label="Farm Aerial View">
+        <img src="https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?w=600&q=80" alt="Farm Aerial View" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Onions Harvest</div></div>
+        <div class="gmi-badge">07 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="7" data-src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=1400&q=90" data-label="Banana Harvest">
+        <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&q=80" alt="Banana Harvest" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Yellow Bananas</div></div>
+        <div class="gmi-badge">08 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="8" data-src="images/processing.jpeg" data-label="Processing Station">
+        <img src="images/processing.jpeg" alt="Processing Station" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Processing Station</div></div>
+        <div class="gmi-badge">09 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="9" data-src="images/youngcoffee.jpeg" data-label="Piggery">
+        <img src="images/youngcoffee.jpeg" alt="Piggery" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffee plants</div></div>
+        <div class="gmi-badge">10 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="10" data-src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1400&q=90" data-label="Sunrise at Maya Farm">
+        <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&q=80" alt="Sunrise at Maya Farm" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Sunrise at Maya Farm</div></div>
+        <div class="gmi-badge">11 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="11" data-src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=1400&q=90" data-label="Export Ready">
+        <img src="https://images.unsplash.com/photo-1459755486867-b55449bb39ff?w=600&q=80" alt="Export Ready" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Export Ready</div></div>
+        <div class="gmi-badge">12 / 16</div>
+      </div>
+
+      <div class="gallery-masonry-item" data-index="12" data-src="images/processing1.jpeg" data-label="Banana Bunch">
+        <img src="images/processing1.jpeg" alt="Banana Bunch" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffe Making</div></div>
+        <div class="gmi-badge">13 / 16</div>
+      </div>
+
+      <!--div class="gallery-masonry-item" data-index="13" data-src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=1400&q=90" data-label="Coffee Cherries">
+        <img src="https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=600&q=80" alt="Coffee Cherries" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Coffee Cherries</div></div>
+        <div class="gmi-badge">14 / 16</div-->
+      </div>
+
+      <!--div class="gallery-masonry-item" data-index="14" data-src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=1400&q=90" data-label="Drying Beds">
+        <img src="https://images.unsplash.com/photo-1520201163981-8cc95007dd2a?w=600&q=80" alt="Drying Beds" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Drying Beds</div></div>
+        <div class="gmi-badge">15 / 16</div-->
+      </div>
+
+      <div class="gallery-masonry-item" data-index="15" data-src="images/coffestage.jpeg" data-label="Goats">
+        <img src="images/coffestage.jpeg" alt="Goats" loading="lazy"/>
+        <div class="gmi-overlay"><div class="gmi-icon"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></div><div class="gmi-label">Young Coffe</div></div>
+        <div class="gmi-badge">16 / 16</div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- Visit CTA -->
+<!-- ══ VISIT CTA ══ -->
 <section style="background:var(--cream);padding:5rem 0;text-align:center;">
   <div class="container">
     <span class="section-label fade-in">Farm Visits</span>
@@ -145,17 +495,18 @@
   </div>
 </section>
 
+<!-- ══ FOOTER ══ -->
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="footer-logo">Maya Farm</div>
-        <div class="footer-loc">Wakiso District, Uganda</div>
+        <div class="footer-loc">Mpigi District, Uganda</div>
         <p>An integrated organic farming enterprise committed to producing premium agricultural products while sustaining communities and ecosystems for generations to come.</p>
         <div class="footer-contact-info">
-          <span><strong>Location:</strong> Wakiso District, Central Region, Uganda</span>
+          <span><strong>Location:</strong> Mpig District, Central Region, Uganda</span>
           <span><strong>Email:</strong> info@mayafarm.ug</span>
-          <span><strong>Phone:</strong> +256 700 000 000</span>
+          <span><strong>Phone:</strong> +256 700 0450 357</span>
         </div>
       </div>
       <div class="footer-links">
@@ -183,18 +534,149 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2025 Maya Farm, Wakiso. All rights reserved.</span>
+      <span>&copy; 2026 Maya Farm, Mpigi. All rights reserved.</span>
       <span>Cultivating Excellence. Naturally.</span>
     </div>
   </div>
 </footer>
 
-<div class="lightbox" id="lightbox">
-  <img class="lightbox-img" id="lightbox-img" src="" alt="Gallery"/>
-  <button class="lightbox-close" id="lightbox-close">&times;</button>
+<!-- ══ LIGHTBOX ══ -->
+<div class="lb" id="lb">
+  <div class="lb-backdrop" id="lbBackdrop"></div>
+  <div class="lb-hint">← → arrow keys &nbsp;·&nbsp; ESC to close</div>
+
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8592;</button>
+
+  <div class="lb-stage">
+    <img class="lb-img" id="lbImg" src="" alt="Gallery Photo"/>
+  </div>
+
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8594;</button>
+  <button class="lb-close" id="lbClose" aria-label="Close">&#215;</button>
+
+  <div class="lb-caption">
+    <span class="lb-label" id="lbLabel"></span>
+    <span class="lb-counter" id="lbCounter"></span>
+  </div>
+
+  <div class="lb-thumbstrip" id="lbThumbs"></div>
 </div>
 
 <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
-<script src="js/main.js"></script>
+
+<script>
+  /* ── Mobile nav ── */
+  const hamburger        = document.getElementById('hamburger');
+  const mobileNav        = document.getElementById('mobileNav');
+  const mobileNavClose   = document.getElementById('mobileNavClose');
+  const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+  const openNav  = () => { mobileNav.classList.add('open'); mobileNavOverlay.classList.add('open'); hamburger.classList.add('open'); };
+  const closeNav = () => { mobileNav.classList.remove('open'); mobileNavOverlay.classList.remove('open'); hamburger.classList.remove('open'); };
+  hamburger.addEventListener('click', openNav);
+  mobileNavClose.addEventListener('click', closeNav);
+  mobileNavOverlay.addEventListener('click', closeNav);
+
+  /* ── Fade-in on scroll ── */
+  const fadeEls = document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => io.observe(el));
+
+  /* ══════════════════════════
+     LIGHTBOX — Prev / Next
+  ══════════════════════════ */
+  const galleryItems = Array.from(document.querySelectorAll('.gallery-masonry-item'));
+  const TOTAL = galleryItems.length;
+
+  // Build images array from DOM
+  const images = galleryItems.map(item => ({
+    src:   item.dataset.src,
+    thumb: item.querySelector('img').src,
+    label: item.dataset.label
+  }));
+
+  const lb        = document.getElementById('lb');
+  const lbImg     = document.getElementById('lbImg');
+  const lbPrev    = document.getElementById('lbPrev');
+  const lbNext    = document.getElementById('lbNext');
+  const lbClose   = document.getElementById('lbClose');
+  const lbLabel   = document.getElementById('lbLabel');
+  const lbCounter = document.getElementById('lbCounter');
+  const lbThumbs  = document.getElementById('lbThumbs');
+  const lbBackdrop= document.getElementById('lbBackdrop');
+
+  let cur = 0;
+
+  // Build thumbnail strip
+  images.forEach((img, i) => {
+    const t = document.createElement('div');
+    t.className = 'lb-thumb';
+    t.innerHTML = `<img src="${img.thumb}" alt="${img.label}" loading="lazy"/>`;
+    t.addEventListener('click', e => { e.stopPropagation(); goTo(i); });
+    lbThumbs.appendChild(t);
+  });
+  const thumbEls = Array.from(lbThumbs.querySelectorAll('.lb-thumb'));
+
+  function goTo(index) {
+    cur = index;
+    const d = images[index];
+
+    // Smooth image swap
+    lbImg.classList.add('fade');
+    setTimeout(() => {
+      lbImg.src = d.src;
+      lbImg.onload = () => lbImg.classList.remove('fade');
+      if (lbImg.complete) lbImg.classList.remove('fade');
+    }, 180);
+
+    lbLabel.textContent   = d.label;
+    lbCounter.textContent = `${index + 1} / ${TOTAL}`;
+
+    lbPrev.classList.toggle('disabled', index === 0);
+    lbNext.classList.toggle('disabled', index === TOTAL - 1);
+
+    thumbEls.forEach((t, i) => t.classList.toggle('active', i === index));
+    thumbEls[index].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+  }
+
+  function openLb(index) {
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    goTo(index);
+  }
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Open on card click
+  galleryItems.forEach((item, i) => item.addEventListener('click', () => openLb(i)));
+
+  // Navigation
+  lbPrev.addEventListener('click', e => { e.stopPropagation(); if (cur > 0) goTo(cur - 1); });
+  lbNext.addEventListener('click', e => { e.stopPropagation(); if (cur < TOTAL - 1) goTo(cur + 1); });
+  lbClose.addEventListener('click', closeLb);
+  lbBackdrop.addEventListener('click', closeLb);
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'ArrowLeft'  && cur > 0)        goTo(cur - 1);
+    if (e.key === 'ArrowRight' && cur < TOTAL - 1) goTo(cur + 1);
+    if (e.key === 'Escape') closeLb();
+  });
+
+  // Touch swipe
+  let tx = 0;
+  lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    const diff = tx - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && cur < TOTAL - 1) goTo(cur + 1);
+      if (diff < 0 && cur > 0)         goTo(cur - 1);
+    }
+  });
+</script>
 </body>
 </html>
