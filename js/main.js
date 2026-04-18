@@ -54,11 +54,16 @@ document.addEventListener('DOMContentLoaded', function () {
   // close on Escape
   document.addEventListener('keydown', e => { if (e.key==='Escape') closeMobileNav(); });
 
-  /* ── Active nav link ── */
-  const current = window.location.pathname.split('/').pop() || 'index.html';
+  /* ── Active nav link — works with clean URLs (no .html) ── */
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  const current   = pathParts.pop() || '';   // e.g. "activities", "contact", or "" for home
+
   document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(link => {
-    const href = link.getAttribute('href');
-    if (href === current || (current === '' && href === 'index.html')) {
+    const href = (link.getAttribute('href') || '').replace(/\.html$/, '').replace(/^\.?\/?/, '');
+    const isHome = current === '' || current === 'maya';
+    if (isHome && (href === '' || href === '.' || href === 'index')) {
+      link.classList.add('active');
+    } else if (!isHome && href === current) {
       link.classList.add('active');
     }
   });

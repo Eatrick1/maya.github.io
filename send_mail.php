@@ -1,8 +1,7 @@
 <?php
 /**
  * Maya Farm — Visit Booking & Contact Form Handler
- * Sends email to farm + confirmation to visitor
- * No PHPMailer — uses PHP mail() function
+ * Uses PHP mail() — configured for Hostinger shared hosting
  */
 
 header('Content-Type: application/json');
@@ -15,29 +14,49 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// ── CONFIG ──────────────────────────────────────────────
-$farm_email    = 'ssendegeyapatrick93@gmail.com';
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+// IMPORTANT: The "From" address MUST match your Hostinger hosting domain
+// Replace noreply@eatricksolutions.com with a real email on your hosting domain
+$from_email    = 'noreply@eatricksolutions.com';   // ← must match your hosting domain
+$farm_email    = 'ssendegeyapatrick93@gmail.com';  // ← where you receive emails
 $farm_name     = 'Maya Farm';
-$form_type     = isset($_POST['form_type']) ? $_POST['form_type'] : 'contact'; // 'visit' or 'contact'
-// ────────────────────────────────────────────────────────
+$form_type     = isset($_POST['form_type']) ? $_POST['form_type'] : 'contact';
+// ────────────────────────────────────────────────────────────────────────────
 
-// ── SANITIZE INPUTS ──────────────────────────────────────
+// ── SANITIZE ────────────────────────────────────────────────────────────────
 function clean($val) {
     return htmlspecialchars(strip_tags(trim($val)));
 }
 
-if ($form_type === 'visit') {
-    // Farm Visit Booking fields
-    $fname    = clean($_POST['vfname']    ?? '');
-    $lname    = clean($_POST['vlname']    ?? '');
-    $email    = filter_var(trim($_POST['vemail'] ?? ''), FILTER_SANITIZE_EMAIL);
-    $phone    = clean($_POST['vphone']   ?? '');
-    $type     = clean($_POST['vtype']    ?? '');
-    $date     = clean($_POST['vdate']    ?? '');
-    $guests   = clean($_POST['vguests']  ?? '');
-    $notes    = clean($_POST['vnotes']   ?? 'None');
+// ── SEND HELPER ─────────────────────────────────────────────────────────────
+function sendEmail($to, $subject, $body, $from_email, $reply_to) {
+    $boundary = md5(time());
+    $headers  = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+    $headers .= "From: Maya Farm <{$from_email}>\r\n";
+    $headers .= "Reply-To: {$reply_to}\r\n";
+    $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+    $headers .= "X-Priority: 1\r\n";
 
-    // Validate required fields
+    // Use -f flag so Hostinger accepts the From address
+    return mail($to, $subject, $body, $headers, "-f{$from_email}");
+}
+
+
+// ════════════════════════════════════════════════════════════════════════════
+// VISIT BOOKING FORM
+// ════════════════════════════════════════════════════════════════════════════
+if ($form_type === 'visit') {
+
+    $fname  = clean($_POST['vfname']  ?? '');
+    $lname  = clean($_POST['vlname']  ?? '');
+    $email  = filter_var(trim($_POST['vemail'] ?? ''), FILTER_SANITIZE_EMAIL);
+    $phone  = clean($_POST['vphone']  ?? '');
+    $type   = clean($_POST['vtype']   ?? '');
+    $date   = clean($_POST['vdate']   ?? '');
+    $guests = clean($_POST['vguests'] ?? '');
+    $notes  = clean($_POST['vnotes']  ?? 'None');
+
     if (!$fname || !$lname || !$email || !$phone || !$type || !$date || !$guests) {
         echo json_encode(['success' => false, 'message' => 'Please fill in all required fields.']);
         exit;
@@ -50,48 +69,40 @@ if ($form_type === 'visit') {
 
     $full_name = "$fname $lname";
 
-    // ── EMAIL TO FARM ────────────────────────────────────
-    $to_farm    = $farm_email;
+    // Email to farm owner
     $subject_farm = "New Farm Visit Booking — $full_name | $date";
-    $body_farm  = "
-New Farm Visit Request
+    $body_farm = "New Farm Visit Request
 ======================
 
-Name:         $full_name
-Email:        $email
-Phone/WA:     $phone
-Visit Type:   $type
-Date:         $date
-No. of Guests: $guests
-Notes:        $notes
+Name:           $full_name
+Email:          $email
+Phone/WA:       $phone
+Visit Type:     $type
+Date:           $date
+No. of Guests:  $guests
+Notes:          $notes
 
 ---
-Submitted via Maya Farm website contact form.
-";
+Submitted via Maya Farm website.
+https://eatricksolutions.com/maya/";
 
-    $headers_farm  = "From: Maya Farm Website <noreply@mayafarm.ug>\r\n";
-    $headers_farm .= "Reply-To: $email\r\n";
-    $headers_farm .= "X-Mailer: PHP/" . phpversion();
+    $sent = sendEmail($farm_email, $subject_farm, $body_farm, $from_email, $email);
 
-    $sent_farm = mail($to_farm, $subject_farm, $body_farm, $headers_farm);
-
-    // ── CONFIRMATION EMAIL TO VISITOR ────────────────────
-    $to_visitor    = $email;
+    // Confirmation to visitor
     $subject_visitor = "Your Farm Visit Request — Maya Farm";
-    $body_visitor  = "
-Dear $fname,
+    $body_visitor = "Dear $fname,
 
 Thank you for requesting a farm visit at Maya Farm!
 
-We have received your booking request and our team will contact you within 24 hours to confirm the details.
+We have received your booking request and our team will contact you within 24 hours to confirm.
 
 Your Booking Summary
 ====================
-Name:         $full_name
-Visit Type:   $type
-Preferred Date: $date
+Name:             $full_name
+Visit Type:       $type
+Preferred Date:   $date
 Number of Guests: $guests
-Notes:        $notes
+Notes:            $notes
 
 What to Expect
 ==============
@@ -106,23 +117,24 @@ Warm regards,
 The Maya Farm Team
 Mpigi District, Uganda
 +1 (248) 533-6685
-info@mayafarm.ug
-";
+info@mayafarm.ug";
 
-    $headers_visitor  = "From: Maya Farm <$farm_email>\r\n";
-    $headers_visitor .= "Reply-To: $farm_email\r\n";
-    $headers_visitor .= "X-Mailer: PHP/" . phpversion();
+    sendEmail($email, $subject_visitor, $body_visitor, $from_email, $farm_email);
 
-    mail($to_visitor, $subject_visitor, $body_visitor, $headers_visitor);
-
-    if ($sent_farm) {
+    if ($sent) {
         echo json_encode(['success' => true, 'message' => 'Your visit request has been received! Check your email for confirmation. We will contact you within 24 hours.']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Sorry, there was an error sending your request. Please WhatsApp us directly on +1 (248) 533-6685.']);
+        // Log error for debugging
+        error_log("Maya Farm mail() failed for visit booking from: $email");
+        echo json_encode(['success' => false, 'message' => 'Sorry, there was a sending error. Please WhatsApp us directly on +1 (248) 533-6685.']);
     }
 
+
+// ════════════════════════════════════════════════════════════════════════════
+// GENERAL CONTACT / INVESTOR INQUIRY
+// ════════════════════════════════════════════════════════════════════════════
 } else {
-    // General Contact / Investor Inquiry fields
+
     $fname    = clean($_POST['fname']        ?? '');
     $lname    = clean($_POST['lname']        ?? '');
     $email    = filter_var(trim($_POST['email'] ?? ''), FILTER_SANITIZE_EMAIL);
@@ -143,37 +155,29 @@ info@mayafarm.ug
 
     $full_name = "$fname $lname";
 
-    // ── EMAIL TO FARM ────────────────────────────────────
-    $to_farm      = $farm_email;
+    // Email to farm owner
     $subject_farm = "New Inquiry from $full_name — Maya Farm Website";
-    $body_farm    = "
-New Contact / Investor Inquiry
+    $body_farm = "New Contact / Investor Inquiry
 ===============================
 
-Name:         $full_name
-Email:        $email
-Phone/WA:     $phone
-Interest:     $interest
-Organization: $org
+Name:          $full_name
+Email:         $email
+Phone/WA:      $phone
+Interest:      $interest
+Organization:  $org
 
 Message:
 $message
 
 ---
-Submitted via Maya Farm website contact form.
-";
+Submitted via Maya Farm website.
+https://eatricksolutions.com/maya/";
 
-    $headers_farm  = "From: Maya Farm Website <noreply@mayafarm.ug>\r\n";
-    $headers_farm .= "Reply-To: $email\r\n";
-    $headers_farm .= "X-Mailer: PHP/" . phpversion();
+    $sent = sendEmail($farm_email, $subject_farm, $body_farm, $from_email, $email);
 
-    $sent_farm = mail($to_farm, $subject_farm, $body_farm, $headers_farm);
-
-    // ── CONFIRMATION EMAIL TO VISITOR ────────────────────
-    $to_visitor      = $email;
+    // Confirmation to user
     $subject_visitor = "Thank you for contacting Maya Farm";
-    $body_visitor    = "
-Dear $fname,
+    $body_visitor = "Dear $fname,
 
 Thank you for reaching out to Maya Farm!
 
@@ -185,25 +189,21 @@ Name:     $full_name
 Interest: $interest
 Message:  $message
 
-In the meantime, feel free to WhatsApp us directly for a faster response:
+In the meantime, feel free to WhatsApp us for a faster response:
 +1 (248) 533-6685
 
 Warm regards,
 The Maya Farm Team
 Mpigi District, Uganda
 +1 (248) 533-6685
-info@mayafarm.ug
-";
+info@mayafarm.ug";
 
-    $headers_visitor  = "From: Maya Farm <$farm_email>\r\n";
-    $headers_visitor .= "Reply-To: $farm_email\r\n";
-    $headers_visitor .= "X-Mailer: PHP/" . phpversion();
+    sendEmail($email, $subject_visitor, $body_visitor, $from_email, $farm_email);
 
-    mail($to_visitor, $subject_visitor, $body_visitor, $headers_visitor);
-
-    if ($sent_farm) {
-        echo json_encode(['success' => true, 'message' => 'Thank you! Your message has been received. Check your email — we will respond within 24 hours.']);
+    if ($sent) {
+        echo json_encode(['success' => true, 'message' => 'Thank you! Your message has been received. We will respond within 24 hours.']);
     } else {
+        error_log("Maya Farm mail() failed for contact form from: $email");
         echo json_encode(['success' => false, 'message' => 'Sorry, there was a sending error. Please WhatsApp us directly on +1 (248) 533-6685.']);
     }
 }
