@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
         countObserver.unobserve(e.target);
       }
     });
-  }, { threshold: 0.5 });
+  }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
   counters.forEach(c => countObserver.observe(c));
 
   function animateCounter(el) {
@@ -261,19 +261,35 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ── Contact form ── */
   const contactForm = document.getElementById('contactForm');
   if (contactForm) {
-    contactForm.addEventListener('submit', e => {
+    contactForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      const btn = contactForm.querySelector('button[type="submit"]');
+      const btn     = contactForm.querySelector('button[type="submit"]');
       const success = document.getElementById('formSuccess');
+
       btn.textContent = 'Sending...';
-      btn.disabled = true;
-      setTimeout(() => {
-        if (success) success.classList.add('show');
-        contactForm.reset();
-        btn.textContent = 'Send Message';
-        btn.disabled = false;
-        setTimeout(() => { if (success) success.classList.remove('show'); }, 6000);
-      }, 1200);
+      btn.disabled    = true;
+      if (success) success.classList.remove('show');
+
+      const data = new FormData(contactForm);
+      data.append('form_type', 'contact');
+
+      fetch('send_mail.php', { method: 'POST', body: data })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            if (success) { success.textContent = res.message; success.classList.add('show'); }
+            contactForm.reset();
+          } else {
+            alert(res.message);
+          }
+        })
+        .catch(() => {
+          alert('Connection error. Please WhatsApp us directly on +1 (248) 533-6685.');
+        })
+        .finally(() => {
+          btn.textContent = 'Send Message';
+          btn.disabled    = false;
+        });
     });
   }
 
